@@ -145,7 +145,7 @@ beiden Zielordner.
 `llm-then-regex` nutzt der Dienst das lokale Modell — robuster bei ungewöhnlichen Layouts, aber
 ~6 s pro Rechnung, also vorher `preflight` laufen lassen.
 
-### Der deutsche Fehlerbericht
+### Fehlerbericht
 
 Eine Textdatei pro abgelehnter Rechnung, direkt neben der Rechnung. Aufbau: Ergebnis und
 Schweregrad, dann jede Feststellung mit den beanstandeten Werten, dann was zu tun ist, dann die
@@ -166,10 +166,6 @@ ERGEBNIS: FEHLERHAFT – 3 Feststellung(en)
   Einzelpreis:                  29,48
   Positionsbetrag:              0,00
 ```
-
-Alle 37 Fehlercodes haben einen handgeschriebenen deutschen Text; `selftest` prüft das, ein neuer
-Code ohne Erklärung fällt also sofort auf.
-
 ### Dauerbetrieb
 
 Bewusst eine Polling-Schleife und keine Dateisystem-Benachrichtigung: nur Standardbibliothek,
