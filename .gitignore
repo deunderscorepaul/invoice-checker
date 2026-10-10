@@ -1,0 +1,88 @@
+# .gitignore für die Ausgangsrechnungsprüfung
+#
+# Grundregel: Quellcode, Tests und Doku gehören ins Repo, alles Erzeugte und
+# alles mit echten Rechnungsdaten nicht.
+
+# ---------------------------------------------------------------------------
+# Echte Rechnungen und personenbezogene Daten - NIEMALS einchecken
+# ---------------------------------------------------------------------------
+# Alles, was hier landet, sind echte oder echt aussehende Belege mit Kundennamen,
+# Anschriften, USt-IdNr., IBANs und Beträgen. Das gehört nicht in die
+# Versionsverwaltung, auch nicht in einem privaten Repo.
+rechnungen/
+pruefordner/
+*.fehlerbericht.txt
+*fehlerbericht*.txt
+
+# ---------------------------------------------------------------------------
+# Erzeugte Testdaten (jederzeit aus dem Seed reproduzierbar)
+# ---------------------------------------------------------------------------
+# data/synth und data/out entstehen mit:
+#   python -m invoice_checker generate -n 300 --scans 0.15
+# Rund 3,7 MB PDFs, Scans und Textdateien, die niemand im Repo braucht.
+data/
+
+# ---------------------------------------------------------------------------
+# Laufzeitdateien des Dienstes
+# ---------------------------------------------------------------------------
+# Der Zustandsspeicher enthält Dateipfade und Fehlercodes echter Rechnungen,
+# das Log zusätzlich Dateinamen. Beides ist lokal und gehört nicht ins Repo.
+service_state*.sqlite3
+service_state*.sqlite3-wal
+service_state*.sqlite3-shm
+service*.log
+*.log
+
+# ---------------------------------------------------------------------------
+# Lokale Konfiguration
+# ---------------------------------------------------------------------------
+# service.json enthält eigene Pfade, Modellnamen und ggf. interne Ablagen.
+# Als Vorlage liegt service.example.json im Repo.
+service.json
+service-*.json
+service.*.json
+*.local.json
+!service.example.json
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# ---------------------------------------------------------------------------
+# Hilfsdateien und Artefakte
+# ---------------------------------------------------------------------------
+.selftest_tmp/
+.selftest_state/
+.scratch/
+*.html
+
+# ---------------------------------------------------------------------------
+# Verschachteltes Repo
+# ---------------------------------------------------------------------------
+# oth-outgoing-invoice/ ist ein eigener Klon
+# (github.com/deunderscorepaul/invoice-checker) und hat hier nichts zu suchen.
+# Entweder löschen oder als Submodul einbinden -- nicht mitcommitten.
+oth-outgoing-invoice/
+
+# ---------------------------------------------------------------------------
+# Editor und Betriebssystem
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

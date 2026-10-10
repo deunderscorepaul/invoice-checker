@@ -1,0 +1,22 @@
+{
+  "_comment": "Vorlage fuer die Rechnungspruefung. Kopieren nach service.json und Pfade anpassen. service.json selbst ist per .gitignore ausgeschlossen, weil dort eigene Pfade drinstehen.",
+  "watch": [
+    {
+      "name": "pruefordner",
+      "input": "rechnungen/pruefordner",
+      "approved": "approved",
+      "failures": "fehlerhaft",
+      "report_language": "de"
+    }
+  ],
+  "poll_seconds": 10,
+  "extraction": "regex",
+  "model": "qwen2.5:7b-instruct",
+  "host": "http://127.0.0.1:11434",
+  "num_ctx": 4096,
+  "timeout": 300,
+  "state_path": "service_state.sqlite3",
+  "log_path": "service.log",
+  "master_path": "data/master_data.json",
+  "dry_run": false
+}
