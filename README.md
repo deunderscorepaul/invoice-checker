@@ -171,8 +171,8 @@ der Dienst.
 ## Dashboard
 
 ```powershell
-& $py -m invoice_checker dashboard --open   # writes data/out/dashboard.html and opens it
-& $py -m invoice_checker summary            # same numbers, in the terminal
+ $py -m invoice_checker dashboard --open   # writes data/out/dashboard.html and opens it
+ $py -m invoice_checker summary            # same numbers, in the terminal
 ```
 
 One **self-contained HTML file** — inline SVG, no server, no CDN, no JavaScript dependencies. It
@@ -239,24 +239,3 @@ Deterministic stages over the same 300 real PDFs: text extraction **1.09 ms/invo
 > purpose is to establish the ceiling and isolate the cost of imperfect extraction, which is exactly
 > the 0.998 → 0.874 gap. See [DESIGN.md](DESIGN.md) for the full reasoning, the correctness
 > controls, and the bugs those controls caught.
-
-## Roadmap for the write-up
-
-1. Rules-only baseline (this repo, `--baseline`) — expected to dominate arithmetic/legal faults.
-2. Prompted small LLM extraction + same rules — measure extraction fidelity, not fault F1, to
-   isolate where the model actually helps.
-3. Optional: Unsloth QLoRA fine-tune of a 4B model on the synthetic corpus, exported to GGUF and
-   served through Ollama. Unsloth's stated QLoRA floor for 3B is 3.5 GB and for 7B is 5 GB, so both
-   fit an 8 GB card (tightly for 7B). Report training VRAM + wall-clock time alongside F1.
-4. Threat model: prompt injection via invoice text; PII/GDPR argument for local inference.
-
-## Legal note
-
-Rule references (e.g. §14 UStG, §33 UStDV) are included for academic traceability. This is a
-teaching artefact, not tax advice; verify every rule against current law before relying on it.
-
-## Documentation
-
-- [DESIGN.md](DESIGN.md) — architecture rationale, measured results, correctness controls, threat
-  model, limitations and next steps. Written to be lifted into the project report.
-
