@@ -1,8 +1,4 @@
 # Ausgangsrechnungsprüfung
-
-Hybride, komplett lokale Prüfung von **Ausgangsrechnungen** auf Consumer-Hardware
-(entwickelt auf 16 GB RAM / RTX 3060 Ti 8 GB).
-
 Grundgedanke: **das kleine lokale LLM wird nur dort eingesetzt, wo Sprache verstanden werden muss
 (unstrukturierte Extraktion und Erklärung). Alle rechtlichen, rechnerischen und formalen Prüfungen
 macht deterministischer Code.** Ein LLM darf niemals eine Spalte Zahlen addieren.
@@ -106,6 +102,8 @@ rechnungen/pruefordner/            <- Rechnungen hier ablegen
 Der Prüfordner ist nach dem Lauf wieder leer; jede Rechnung liegt danach in genau einem der
 beiden Zielordner.
 
+1. Nur Regel basiertes prüfen:
+
 ```json
 {
   "watch": [
@@ -119,7 +117,20 @@ beiden Zielordner.
   "log_path": "service.log"
 }
 ```
-
+2. LLM + Regeln (fallback auf regeln falls keine llm instanz gefunden werden kann)
+```json
+{
+  "watch": [
+    { "name": "pruefordner", "input": "rechnungen/pruefordner",
+      "approved": "approved", "failures": "fehlerhaft" }
+  ],
+  "poll_seconds": 10,
+  "extraction": "llm-then-regex", 
+  "model": "qwen2.5:7b-instruct",
+  "state_path": "service_state.sqlite3",
+  "log_path": "service.log"
+}
+```
 ### Was der Dienst garantiert
 
 | Garantie | Umsetzung |
