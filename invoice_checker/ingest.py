@@ -32,26 +32,24 @@ class IngestError(RuntimeError):
     pass
 
 
+# Compiled regex for fast extraction of escaped characters and octal values
+ESCAPE_RE = re.compile(rb"\\([0-7]{1,3}|.)", re.DOTALL)
+
+
+def _replace_escape(match: re.Match) -> bytes:
+    val = match.group(1)
+    if val[0] in b"01234567":
+        return bytes([int(val, 8) & 0xFF])
+    return UNESCAPE.get(val, val)
+
+
 def _decode_literal(raw: bytes) -> bytes:
     """Undo PDF literal-string escapes."""
-    out = bytearray()
-    index = 0
-    while index < len(raw):
-        char = raw[index:index + 1]
-        if char == b"\\" and index + 1 < len(raw):
-            nxt = raw[index + 1:index + 2]
-            if nxt.isdigit():
-                octal = raw[index + 1:index + 4]
-                match = re.match(rb"[0-7]{1,3}", octal)
-                out.append(int(match.group(0), 8) & 0xFF)
-                index += 1 + len(match.group(0))
-                continue
-            out.extend(UNESCAPE.get(nxt, nxt))
-            index += 2
-            continue
-        out.append(raw[index])
-        index += 1
-    return bytes(out)
+    # ⚡ Bolt Optimization: Early return for strings without escapes,
+    # and replaced slow manual byte iteration with regex substitution
+    if b"\\" not in raw:
+        return raw
+    return ESCAPE_RE.sub(_replace_escape, raw)
 
 
 def _decode_hex(raw: bytes) -> bytes:
