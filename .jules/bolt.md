@@ -1,0 +1,3 @@
+## 2026-10-14 - Python String Iteration Performance
+**Learning:** Manual byte-by-byte iteration using a `while` loop and `bytearray.append()` in Python is extremely slow compared to native C-backed string operations like `re.sub()`. Also, an early exit `if b"\\" not in raw:` provides a massive speedup for the common case where strings do not contain escapes.
+**Action:** Next time you need to transform characters or bytes, prefer using compiled regular expressions (`re.sub` with a replacer function) or native string methods (`str.replace`, `str.translate`) over manual looping. Always look for an early exit condition to bypass processing entirely.
